@@ -3,6 +3,7 @@ Person Tracker Turret
 An autonomous turret that uses person recognition to aim at a person and then shoot yellow foam balls at them. It can also be controlled using a PS4 controller connected to a laptop. The code is located in the turret directory.
 Components Needed
 
+    1 Oak-D camera 
     2 brushless motors
     2 ESCs (Electronic Speed Controllers)
     1 Arduino Nano
