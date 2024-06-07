@@ -1,0 +1,91 @@
+#include <Servo.h>
+#include <Wire.h>
+
+int step_number = 0;
+
+
+Servo servo_x;
+Servo servo_y;
+Servo servo_f;
+
+// Declare Servo objects globally
+Servo ESC1;
+Servo ESC2;
+int Speed;
+
+
+
+int servo_x_p = 11;
+int servo_y_p = 10;
+int servo_f_p = 9;
+
+
+int servo_x_angle = 90;
+int servo_y_angle = 90;
+int servo_f_angle = 0;
+
+
+void setup() {
+
+  ESC2.attach(5,1000,2000);
+  ESC1.attach(6,1000,2000);
+  delay(5000);
+
+  servo_x.attach(servo_x_p);
+  servo_y.attach(servo_y_p);
+  servo_f.attach(servo_f_p);
+  delay(30);
+  servo_x.write(servo_x_angle);
+  servo_y.write(servo_y_angle);
+  servo_f.write(servo_f_angle);
+
+  delay(30);
+  Serial.begin(9600);
+}
+
+
+
+void loop() {
+  servo_x.write(servo_x_angle);
+  servo_y.write(servo_y_angle);
+  Speed = analogRead(A0);
+  Speed = map(Speed,0,1023,0,180);
+  delay(20);
+  ESC2.write(Speed);
+  delay(20);
+  ESC1.write(Speed);
+  delay(10);
+  if (Serial.available() > 0) {
+    
+    char incomingByte = Serial.read();
+    Serial.println(incomingByte);
+    char lastbyte = incomingByte;
+    if (incomingByte == 'R') {
+      servo_x_angle = constrain(servo_x_angle + 1, 0, 180);
+      servo_x.write(servo_x_angle);
+      
+    }
+    if (incomingByte == 'L') {
+      servo_x_angle = constrain(servo_x_angle - 1, 0, 180);
+      servo_x.write(servo_x_angle);
+    }
+    if (incomingByte == 'U') {
+      servo_y_angle = constrain(servo_y_angle + 1, 70, 120);
+      servo_y.write(servo_y_angle);
+    }
+    if (incomingByte == 'D') {
+      servo_y_angle = constrain(servo_y_angle - 1, 70, 120);
+      servo_y.write(servo_y_angle);
+    }
+    if (incomingByte == 'S') {
+      servo_f.write(180);
+      delay(1000);
+      servo_f.write(0);
+      delay(1000);
+
+
+    }
+
+    }
+  }
+
